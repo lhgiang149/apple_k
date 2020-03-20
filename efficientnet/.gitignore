@@ -1,10 +1,8 @@
-# Custom 
-tmp
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+.idea/
 
 # C extensions
 *.so
@@ -105,22 +103,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-.DS_STORE
-
-# PyCharm
-.idea*
-*.xml
-
-# Custom
-tensorflow/
-example/test*
-*.pth*
-examples/imagenet/data/
-!examples/imagenet/data/README.md
-tmp
-tf_to_pytorch/pretrained_tensorflow
-!tf_to_pytorch/pretrained_tensorflow/download.sh
-examples/imagenet/run.sh
-
-
-
