@@ -3,7 +3,7 @@ import imgaug.augmenters as iaa
 import os
 import cv2
 import numpy as np
-import pandas as 
+import pandas as pd
 from PIL import Image
 
 from keras.preprocessing.image import ImageDataGenerator
@@ -13,19 +13,19 @@ executor = Pool(processes=workers)
 
 
 
-def process_data(image_path, label_path, train = False, batch_size = 20):
+def process_data(image_path, label_path, train = False, batch_size = 12):
     X,y = multithread_preprocess_data(image_path, label_path)
     if train:
         X,y = augument(X,y)
         X,y = unison_shuffled_copies(X,y)
+        num_train = len(X)
         aug = ImageDataGenerator(rescale=1./255)
-        return aug.flow(X,y, batch_size=batch_size)
+        return aug.flow(X,y, batch_size=batch_size), num_train
     return X,y
 
 
-def augument(images, labels, number_aug = 3):
+def augument(images, labels, number_aug = 4):
     sometimes = lambda aug: iaa.Sometimes(0.5, aug)
-
     seq = iaa.Sequential(
         [
 
@@ -97,7 +97,6 @@ def augument(images, labels, number_aug = 3):
 
 
 def letterbox_image(image, size):
-    '''resize image with unchanged aspect ratio using padding'''
     iw, ih = image.size
     w, h = size
     scale = min(w/iw, h/ih)
