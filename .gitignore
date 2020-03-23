@@ -3,4 +3,5 @@
 *.pth
 *_test.py
 *.ckpt.data-00000-of-00001
-data/
+data/train_data.npy
+data/images/
