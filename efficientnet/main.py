@@ -2,44 +2,67 @@ import numpy as np
 from keras.optimizers import Adam,SGD
 from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
 
+from efficientnet.model import *
+
 
 import efficientnet.tfkeras
-from tensorflow.keras.models import load_model
+# from tensorflow.keras.models import load_model
+from keras.models import load_model
+
 
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 from data_processing import *
 
+from multiprocessing import Pool, cpu_count
+
+from keras.backend import sigmoid
+def swish(x, beta = 1):
+    return (x * sigmoid(beta * x))
+
+from keras.utils.generic_utils import get_custom_objects
+from keras.layers import Activation
+get_custom_objects().update({'swish': Activation(swish)})
+
 
 def _main():
-    image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/images/'
-    labels_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train.csv'
+    # image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/images/'
+    # labels_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train.csv'
+    image_path = 'C:/Users/ADMINS/Desktop/apple_k/data/images/'
+    labels_path = 'C:/Users/ADMINS/Desktop/apple_k/data/train.csv'
+    
+    workers = cpu_count()
+    executor = Pool(processes=workers)   
 
     freeze = 1
 
     # step = 607
-    # data, num_train = process_data(image_path,label_path)
-    temp_data = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/'
-    X = np.load(temp_data+'train_data.npy')
-    y = np.load(temp_data+'train_label.npy')
+    data, num_train = process_data(image_path,labels_path, executor)
 
-    num_train = 1821
-    aug = ImageDataGenerator(rescale=1.)
-    batch_size = 20
+    # temp_data = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/'
+    # temp_data = 'C:/Users/ADMINS/Desktop/apple_k/data/'
+    # X = np.load(temp_data+'train_data.npy')
+    # y = np.load(temp_data+'train_label.npy')
+
+    # num_train = 1821
+    # aug = ImageDataGenerator(rescale=1.)
+    # batch_size = 20
 
     weights_path = 'model/model.h5'
-    model = load_model(weights_path)
+    # model = load_model(weights_path)
+    model = EfficientNetB7( weights=weights_path)
 
+    
     # temporary use Adam and
     adam = Adam(lr = 0.0001)
 
     # Freeze FC layers
     for i in range((len(model.layers)-freeze)):
         model.layers[i].trainable = False
-    model.compile(optimizers = adam, loss = [focal_loss])
-    # model.fit_generator(data, epochs = 20, , step_per_epoch = num_train//20  , metrics = ['accuracy'])
-    model.fit_generator(aug.flow(X,y,batch_size = 20), epochs = 20, step_per_epoch = num_train//batch_size  , metrics = ['accuracy'])
+    model.compile(optimizer = adam, loss = [focal_loss])
+    model.fit_generator(data, epochs = 20, step_per_epoch = num_train//12  , metrics = ['accuracy'])
+    # model.fit_generator(aug.flow(X,y,batch_size = 20), epochs = 20, step_per_epoch = num_train//batch_size  , metrics = ['accuracy'])
 
 def focal_loss(gamma=2., alpha=.25):
 	def focal_loss_fixed(y_true, y_pred):

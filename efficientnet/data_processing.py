@@ -7,14 +7,12 @@ import pandas as pd
 from PIL import Image
 
 from keras.preprocessing.image import ImageDataGenerator
-from multiprocessing import Pool, cpu_count
-workers = cpu_count()
-executor = Pool(processes=workers)   
 
 
 
-def process_data(image_path, label_path, train = False, batch_size = 12):
-    X,y = multithread_preprocess_data(image_path, label_path)
+
+def process_data(image_path, label_path, executor, train = False, batch_size = 12):
+    X,y = multithread_preprocess_data(image_path, label_path, executor)
     if train:
         X,y = augument(X,y)
         X,y = unison_shuffled_copies(X,y)
@@ -109,24 +107,19 @@ def letterbox_image(image, size):
     return new_image
 
 def readAndProcess(image_path):
-    path = image_path + image + '.jpg'
+    path = image_path
     im = Image.open(path)
     im = np.array(letterbox_image(im, (600,600)))
     im = np.reshape(im,[1]+list(im.shape))
     return im 
-    if 'X' not in locals():
-        X = im
-    else:
-        X = np.concatenate((X,im))
+    
 
-def multithread_preprocess_data(image_path, csv_path):
-    workers = cpu_count()
-    executor = Pool(processes=workers)
+def multithread_preprocess_data(image_path, csv_path, executor):
     csv = pd.read_csv(csv_path)
     labels = True if csv.shape[1] == 5 else False
     path = []
     for image in csv['image_id']:
-        path.append[image_path + image + '.jpg']
+        path.append(image_path + image + '.jpg')
     X = np.vstack(executor.map(readAndProcess,path))
     if labels:
         y = csv.loc[:, 'healthy':].values
