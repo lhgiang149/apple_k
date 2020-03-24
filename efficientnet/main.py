@@ -4,7 +4,7 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, Ear
 
 from efficientnet.model import *
 
-
+import keras
 import efficientnet.tfkeras
 # from tensorflow.keras.models import load_model
 from keras.models import load_model
@@ -27,31 +27,26 @@ get_custom_objects().update({'swish': Activation(swish)})
 
 
 def _main():
-    # image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/images/'
-    # labels_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train.csv'
-    image_path = 'C:/Users/ADMINS/Desktop/apple_k/data/images/'
-    labels_path = 'C:/Users/ADMINS/Desktop/apple_k/data/train.csv'
-    
-    workers = cpu_count()
-    executor = Pool(processes=workers)   
+    image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/images/'
+    labels_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train.csv'
+    # image_path = 'C:/Users/ADMINS/Desktop/apple_k/data/images/'
+    # labels_path = 'C:/Users/ADMINS/Desktop/apple_k/data/train.csv'
 
     freeze = 1
 
     # step = 607
-    data, num_train = process_data(image_path,labels_path, executor)
-
-    # temp_data = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/'
-    # temp_data = 'C:/Users/ADMINS/Desktop/apple_k/data/'
-    # X = np.load(temp_data+'train_data.npy')
-    # y = np.load(temp_data+'train_label.npy')
-
-    # num_train = 1821
-    # aug = ImageDataGenerator(rescale=1.)
-    # batch_size = 20
+    num_train = 1500
+    num_val = 321
+    
 
     weights_path = 'model/model.h5'
     # model = load_model(weights_path)
-    model = EfficientNetB7( weights=weights_path)
+    
+    model = EfficientNetB7(weights=weights_path,
+                        backend = keras.backend,
+                        layers = keras.layers,
+                        models = keras.models,
+                        utils = keras.utils)
 
     
     # temporary use Adam and
@@ -60,8 +55,16 @@ def _main():
     # Freeze FC layers
     for i in range((len(model.layers)-freeze)):
         model.layers[i].trainable = False
-    model.compile(optimizer = adam, loss = [focal_loss])
-    model.fit_generator(data, epochs = 20, step_per_epoch = num_train//12  , metrics = ['accuracy'])
+    model.compile(optimizer = adam, 
+                loss = 'categorical_crossentropy',
+                metrics = ['accuracy'])
+    model.fit_generator(data_generator(image_path, labels_path, 30),
+        epochs = 20, 
+        steps_per_epoch = num_train//30 , 
+        validation_data = data_generator(image_path, labels_path, 30, True),
+        validation_steps = num_val//30,
+        initial_epoch = 0)
+    model.save_weights('model.h5')
     # model.fit_generator(aug.flow(X,y,batch_size = 20), epochs = 20, step_per_epoch = num_train//batch_size  , metrics = ['accuracy'])
 
 def focal_loss(gamma=2., alpha=.25):

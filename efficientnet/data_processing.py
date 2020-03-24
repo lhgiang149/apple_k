@@ -13,6 +13,7 @@ from keras.preprocessing.image import ImageDataGenerator
 
 def process_data(image_path, label_path, executor, train = False, batch_size = 12):
     X,y = multithread_preprocess_data(image_path, label_path, executor)
+
     if train:
         X,y = augument(X,y)
         X,y = unison_shuffled_copies(X,y)
@@ -22,7 +23,7 @@ def process_data(image_path, label_path, executor, train = False, batch_size = 1
     return X,y
 
 
-def augument(images, labels, number_aug = 4):
+def augument(images, labels, number_aug = 3):
     sometimes = lambda aug: iaa.Sometimes(0.5, aug)
     seq = iaa.Sequential(
         [
@@ -87,6 +88,7 @@ def augument(images, labels, number_aug = 4):
         random_order=True
     )
     for _ in range(number_aug):
+        # image_aug = seq(images=images)
         images_aug = np.vstack(seq(images=images))
         images = np.concatenate((images,images_aug))
         y = np.concatenate((y,y))
@@ -129,7 +131,50 @@ def multithread_preprocess_data(image_path, csv_path, executor):
 
 def unison_shuffled_copies(x, y):
     assert len(x) == len(y)
+    np.random.seed(2000)
     p = np.random.permutation(len(x))
     return x[p], y[p]
     
- 
+def data_generator(image_dir, labels_path, batch_size, validate = False):
+    csv = pd.read_csv(labels_path)
+    image_named = list(csv['image_id'])
+    y = csv.loc[:, 'healthy':].values
+    image_named , y = unison_shuffled_copies(image_named, y)
+    
+    num_train = 1500
+    train = image_named[:num_train]
+    val = image_named[num_train:]
+    # batch_size = 30
+    
+    i = 0
+    while True:
+        if i == 0:
+            image_named , y = unison_shuffled_copies(image_named, y)
+        image_data = []
+        box_data = []
+        base = i
+        
+        if not validate:
+            batch_size /=3
+        for b in range(int(batch_size)):
+            # print(train)
+            # print(image_dir, base, b)
+            image = readAndProcess(image_dir + train[base+b])
+            image_data.append(image)
+            i += 1 
+        y_true = y[base:i]
+
+        if validate:
+            np.random.seed(i)
+            ind = np.random.randint(1500,1821,(batch_size))
+            for temp in ind:
+                image = readAndProcess(image_dir+ val[temp])
+                image_data.append(image)
+            y_true = y[ind]
+            image_data = np.array(image_data)
+            np.random.seed(2000)
+            yield [image_data, y_true]
+
+        image_data, y_true = augument(image_data)
+        # image_data = np.array(image_data)
+        yield [image_data, y_true]
