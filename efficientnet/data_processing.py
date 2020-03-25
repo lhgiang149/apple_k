@@ -23,7 +23,7 @@ def process_data(image_path, label_path, executor, train = False, batch_size = 1
     return X,y
 
 
-def augument(images, labels, number_aug = 3):
+def augument(images, labels, number_aug = 2):
     sometimes = lambda aug: iaa.Sometimes(0.5, aug)
     seq = iaa.Sequential(
         [
@@ -88,13 +88,13 @@ def augument(images, labels, number_aug = 3):
         random_order=True
     )
     for _ in range(number_aug):
-        # image_aug = seq(images=images)
-        images_aug = np.vstack(seq(images=images))
-        images = np.concatenate((images,images_aug))
-        y = np.concatenate((y,y))
+        image_aug = seq(images=images)
+        print(image_aug.shape)
+        # images_aug = np.vstack(seq(images=images))
+        images = np.concatenate((images,image_aug))
+        labels = np.concatenate((labels,labels))
         
-    return images, y 
-
+    return images, labels
 
 def letterbox_image(image, size):
     iw, ih = image.size
@@ -112,7 +112,7 @@ def readAndProcess(image_path):
     path = image_path
     im = Image.open(path)
     im = np.array(letterbox_image(im, (600,600)))
-    im = np.reshape(im,[1]+list(im.shape))
+    # im = np.reshape(im,[1]+list(im.shape))
     return im 
     
 
@@ -135,46 +135,42 @@ def unison_shuffled_copies(x, y):
     p = np.random.permutation(len(x))
     return x[p], y[p]
     
-def data_generator(image_dir, labels_path, batch_size, validate = False):
-    csv = pd.read_csv(labels_path)
-    image_named = list(csv['image_id'])
-    y = csv.loc[:, 'healthy':].values
-    image_named , y = unison_shuffled_copies(image_named, y)
-    
-    num_train = 1500
-    train = image_named[:num_train]
-    val = image_named[num_train:]
-    # batch_size = 30
-    
+def train_generator(image_dir, train, batch_size, y):
     i = 0
     while True:
-        if i == 0:
-            image_named , y = unison_shuffled_copies(image_named, y)
         image_data = []
         box_data = []
         base = i
-        
-        if not validate:
-            batch_size /=3
+
+        # only use for train
+        batch_size /=3
+
         for b in range(int(batch_size)):
-            # print(train)
-            # print(image_dir, base, b)
-            image = readAndProcess(image_dir + train[base+b])
+            image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
+
+            image_data.append(image)
+
+            i += 1
+
+        print(len(image_data)) 
+        image_data = np.array(image_data)
+        y_true = y[base:i]
+        image_data, y_true = augument(image_data, y_true)
+        print(image_data.shape, y_true.shape,i)
+        yield [image_data, y_true]
+
+
+def val_generator(image_dir, train, batch_size, y):
+    i = 0
+    while True:
+        image_data = []
+        box_data = []
+        base = i
+        for b in range(int(batch_size)):
+            image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
             image_data.append(image)
             i += 1 
+        image_data = np.array(image_data)
         y_true = y[base:i]
-
-        if validate:
-            np.random.seed(i)
-            ind = np.random.randint(1500,1821,(batch_size))
-            for temp in ind:
-                image = readAndProcess(image_dir+ val[temp])
-                image_data.append(image)
-            y_true = y[ind]
-            image_data = np.array(image_data)
-            np.random.seed(2000)
-            yield [image_data, y_true]
-
-        image_data, y_true = augument(image_data)
-        # image_data = np.array(image_data)
+        # print(image_data.shape, y_true.shape,i)
         yield [image_data, y_true]
