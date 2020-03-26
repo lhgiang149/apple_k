@@ -1,0 +1,100 @@
+C:/Users/emage/OneDrive/Desktop/newest/(1).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(10).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(100).png 648,33,686,71,3 1087,76,1190,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(11).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(12).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(13).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(14).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(15).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(16).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(17).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(18).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(19).png 648,33,686,71,3 1052,76,1158,114,2 1014,514,1092,547,5 960,343,1183,515,6
+C:/Users/emage/OneDrive/Desktop/newest/(2).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(20).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(21).png 648,33,686,71,3 1172,639,1255,671,5
+C:/Users/emage/OneDrive/Desktop/newest/(22).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(23).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(24).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(25).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(26).png 648,33,686,71,3 1052,76,1158,114,2 1014,514,1092,547,5 960,343,1183,515,6
+C:/Users/emage/OneDrive/Desktop/newest/(27).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(28).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(29).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(3).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(30).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(31).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(32).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(33).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(34).png 648,33,686,71,3
+C:/Users/emage/OneDrive/Desktop/newest/(35).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(36).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(37).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(38).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(39).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(4).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(40).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(41).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(42).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(43).png 648,33,686,71,3 1052,76,1158,114,2 1014,514,1092,547,5 960,343,1183,515,6
+C:/Users/emage/OneDrive/Desktop/newest/(44).png 648,33,686,71,3 1052,76,1158,114,2 1014,514,1092,547,5 960,343,1183,515,6
+C:/Users/emage/OneDrive/Desktop/newest/(45).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(46).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(47).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(48).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(49).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(5).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(50).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(51).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(52).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(53).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(54).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(55).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(56).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(57).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(58).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(59).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(6).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(60).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(61).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(62).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(63).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(64).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(65).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(66).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(67).png 1198,151,1274,219,0 1199,251,1273,322,1 1084,409,1167,442,5
+C:/Users/emage/OneDrive/Desktop/newest/(68).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(69).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(7).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(70).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(71).png 1198,151,1274,219,0 1199,251,1273,322,1 1084,409,1168,441,5
+C:/Users/emage/OneDrive/Desktop/newest/(72).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(73).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(74).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(75).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(76).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(77).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(78).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(79).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(8).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(80).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(81).png 1172,638,1255,671,5
+C:/Users/emage/OneDrive/Desktop/newest/(82).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(83).png 648,33,686,71,3 1052,76,1158,114,2
+C:/Users/emage/OneDrive/Desktop/newest/(84).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(85).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4 1171,639,1255,671,5
+C:/Users/emage/OneDrive/Desktop/newest/(86).png 648,33,686,71,3 1052,76,1158,114,2 1014,514,1092,547,5 960,343,1183,515,6
+C:/Users/emage/OneDrive/Desktop/newest/(87).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(88).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(89).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(9).png 1198,151,1274,219,0 1199,251,1273,322,1
+C:/Users/emage/OneDrive/Desktop/newest/(90).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(91).png 648,33,686,71,3 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(92).png 175,65,208,90,4 175,123,208,149,4 175,182,208,205,4
+C:/Users/emage/OneDrive/Desktop/newest/(93).png 648,33,686,71,3 852,75,956,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(94).png 648,33,686,71,3 852,75,956,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(95).png 648,33,686,71,3 852,75,956,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(96).png 648,33,686,71,3 1087,76,1190,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(97).png 648,33,686,71,3 1087,76,1190,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(98).png 648,33,686,71,3 1087,76,1190,117,2
+C:/Users/emage/OneDrive/Desktop/newest/(99).png 648,33,686,71,3 1087,76,1190,117,2

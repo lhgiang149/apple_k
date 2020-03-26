@@ -11,17 +11,8 @@ from keras.preprocessing.image import ImageDataGenerator
 
 
 
-def process_data(image_path, label_path, executor, train = False, batch_size = 12):
-    X,y = multithread_preprocess_data(image_path, label_path, executor)
-
-    if train:
-        X,y = augument(X,y)
-        X,y = unison_shuffled_copies(X,y)
-        num_train = len(X)
-        aug = ImageDataGenerator(rescale=1./255)
-        return aug.flow(X,y, batch_size=batch_size), num_train
-    return X,y
-
+import imgaug as ia
+import imgaug.augmenters as iaa
 
 def augument(images, labels, number_aug = 2):
     sometimes = lambda aug: iaa.Sometimes(0.5, aug)
@@ -87,14 +78,15 @@ def augument(images, labels, number_aug = 2):
         ],
         random_order=True
     )
+    temp_image = np.copy(images)
+    temp_labels = np.copy(labels)
     for _ in range(number_aug):
         image_aug = seq(images=images)
-        print(image_aug.shape)
         # images_aug = np.vstack(seq(images=images))
-        images = np.concatenate((images,image_aug))
-        labels = np.concatenate((labels,labels))
+        temp_image = np.concatenate((temp_image,image_aug))
+        temp_labels = np.concatenate((temp_labels,labels))
         
-    return images, labels
+    return temp_image, temp_labels
 
 def letterbox_image(image, size):
     iw, ih = image.size
@@ -137,28 +129,23 @@ def unison_shuffled_copies(x, y):
     
 def train_generator(image_dir, train, batch_size, y):
     i = 0
-    while True:
+    batch_size = batch_size/3
+
+    while True :
         image_data = []
-        box_data = []
         base = i
-
         # only use for train
-        batch_size /=3
-
         for b in range(int(batch_size)):
             image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
-
             image_data.append(image)
+            i = (i+1)
 
-            i += 1
-
-        print(len(image_data)) 
         image_data = np.array(image_data)
         y_true = y[base:i]
         image_data, y_true = augument(image_data, y_true)
-        print(image_data.shape, y_true.shape,i)
+        # print(image_data.shape, y_true.shape)
         yield [image_data, y_true]
-
+        
 
 def val_generator(image_dir, train, batch_size, y):
     i = 0
