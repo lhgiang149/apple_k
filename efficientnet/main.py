@@ -33,6 +33,9 @@ def _main():
     num_train = 1500
     train = image_named[:num_train]
     val = image_named[num_train:]
+    y_train = np.copy(y[:num_train])
+    y_val = np.copy(y[num_train:])
+    
 
     freeze = 1
 
@@ -77,15 +80,15 @@ def _main():
                 loss = [categorical_focal_loss(alpha=.25, gamma=2)],
                 metrics = ['accuracy'])
 
-    model.fit_generator(train_generator(image_path, train, 3, y),
+    model.fit_generator(train_generator(image_path, train, 3, y, num_train),
         epochs = 20, 
         steps_per_epoch = num_train//3, 
-        validation_data = val_generator(image_path, val, 3, y),
+        validation_data = val_generator(image_path, val, 3, y, num_val),
         validation_steps = num_val//3,
         initial_epoch = 0,
         verbose = 1,
         callbacks=[checkpoint])
-    model.save_weights('model.h5')
+    model.save_weights(log_dir+'model.h5')
     # model.fit_generator(aug.flow(X,y,batch_size = 20), epochs = 20, step_per_epoch = num_train//batch_size  , metrics = ['accuracy'])
 
 # def focal_loss(gamma=2., alpha=.25):

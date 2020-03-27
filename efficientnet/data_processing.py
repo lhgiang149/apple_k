@@ -127,7 +127,7 @@ def unison_shuffled_copies(x, y):
     p = np.random.permutation(len(x))
     return x[p], y[p]
     
-def train_generator(image_dir, train, batch_size, y):
+def train_generator(image_dir, train, batch_size, y, num_train):
     i = 0
     batch_size = batch_size/3
 
@@ -138,26 +138,31 @@ def train_generator(image_dir, train, batch_size, y):
         for b in range(int(batch_size)):
             image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
             image_data.append(image)
-            i = (i+1)
+            i = (i+1)%num_train
 
         image_data = np.array(image_data)
-        y_true = y[base:i]
+        y_true = np.copy(y[base:i])
+        if len(y_true) != len(image_data):
+            y_true = np.copy(y[base:len(y)])
+            # y_true = np.concatenate((y_true,np.copy(y[:i]))) 
         image_data, y_true = augument(image_data, y_true)
         # print(image_data.shape, y_true.shape)
         yield [image_data, y_true]
         
 
-def val_generator(image_dir, train, batch_size, y):
+def val_generator(image_dir, train, batch_size, y, num_val):
     i = 0
     while True:
         image_data = []
-        box_data = []
         base = i
         for b in range(int(batch_size)):
             image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
             image_data.append(image)
-            i += 1 
+            i = (i+1)%num_val
         image_data = np.array(image_data)
-        y_true = y[base:i]
+        y_true = np.copy(y[base:i])
+        if len(y_true) != len(image_data):
+            y_true = np.copy(y[base:len(y)])
+            # y_true = np.concatenate((y_true,np.copy(y[:i])))
         # print(image_data.shape, y_true.shape,i)
         yield [image_data, y_true]
