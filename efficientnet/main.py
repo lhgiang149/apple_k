@@ -17,11 +17,15 @@ def swish(x, beta = 1):
 
 from keras.utils.generic_utils import get_custom_objects
 from keras.layers import Activation
+from keras import metrics
+
+from keras.preprocessing.image import ImageDataGenerator
+
 get_custom_objects().update({'swish': Activation(swish)})
 
 def _main():
-    image_path = '/home/Projects/UTL/toby/apple_k/data/train/'
-    labels_path = '/home/Projects/UTL/toby/apple_k/train.csv'
+    image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train_image/'
+    labels_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/train.csv'
     # image_path = 'C:/Users/ADMINS/Desktop/apple_k/data/images/'
     # labels_path = 'C:/Users/ADMINS/Desktop/apple_k/data/train.csv'
     csv = pd.read_csv(labels_path)
@@ -37,7 +41,7 @@ def _main():
     y_val = np.copy(y[num_train:])
     
 
-    freeze = 1
+    freeze = 3
 
     # step = 607
     num_train = 1500
@@ -61,7 +65,7 @@ def _main():
     model = keras.models.Model(inputs = [base_model.input], outputs=[output])
     
     # # temporary use Adam and
-    adam = Adam(lr = 0.0001)
+    adam = Adam(lr = 0.001)
     # logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
         monitor='val_loss', save_weights_only=True, save_best_only=True, mode = 'min')
@@ -75,16 +79,22 @@ def _main():
     # Freeze FC layers
     for i in range((len(model.layers)-freeze)):
         model.layers[i].trainable = False
+    # model.compile(optimizer = adam, 
+    #             loss = 'categorical_crossentropy',
+    #             # loss = [categorical_focal_loss(alpha=.25, gamma=2)],
+    #             metrics = ['accuracy'])
     model.compile(optimizer = adam, 
-                # loss = 'categorical_crossentropy',
-                loss = [categorical_focal_loss(alpha=.25, gamma=2)],
-                metrics = ['accuracy'])
+            loss = 'categorical_crossentropy',
+            # loss = [categorical_focal_loss(alpha=.25, gamma=2)],
+            metrics = [metrics.categorical_accuracy])
 
-    model.fit_generator(train_generator(image_path, train, 3, y, num_train),
+    batch_size  = 6
+
+    model.fit_generator(train_generator(image_path, train, batch_size, y_train, num_train),
         epochs = 20, 
-        steps_per_epoch = num_train//3, 
-        validation_data = val_generator(image_path, val, 3, y, num_val),
-        validation_steps = num_val//3,
+        steps_per_epoch = num_train//batch_size, 
+        validation_data = val_generator(image_path, val, batch_size, y_val, num_val),
+        validation_steps = num_val//batch_size,
         initial_epoch = 0,
         verbose = 1,
         callbacks=[checkpoint])

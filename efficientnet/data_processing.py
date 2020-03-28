@@ -103,7 +103,9 @@ def letterbox_image(image, size):
 def readAndProcess(image_path):
     path = image_path
     im = Image.open(path)
-    im = np.array(letterbox_image(im, (600,600)))
+    im = im.resize((600,600), Image.BICUBIC)
+    im = np.array(im)
+    # im = np.array(letterbox_image(im, (600,600)))
     # im = np.reshape(im,[1]+list(im.shape))
     return im 
     
@@ -136,33 +138,38 @@ def train_generator(image_dir, train, batch_size, y, num_train):
         base = i
         # only use for train
         for b in range(int(batch_size)):
-            image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
+            num = (base+b)%num_train
+            image = readAndProcess(image_dir + str(train[num]) + '.jpg')
             image_data.append(image)
             i = (i+1)%num_train
 
         image_data = np.array(image_data)
+        image_data = image_data/255
         y_true = np.copy(y[base:i])
         if len(y_true) != len(image_data):
             y_true = np.copy(y[base:len(y)])
-            # y_true = np.concatenate((y_true,np.copy(y[:i]))) 
-        image_data, y_true = augument(image_data, y_true)
+            y_true = np.concatenate((y_true,np.copy(y[:i]))) 
+        # data = ImageDataGenerator()
+        # image_data, y_true = augument(image_data, y_true)
         # print(image_data.shape, y_true.shape)
         yield [image_data, y_true]
         
 
-def val_generator(image_dir, train, batch_size, y, num_val):
+def val_generator(image_dir, val, batch_size, y, num_val):
     i = 0
     while True:
         image_data = []
         base = i
         for b in range(int(batch_size)):
-            image = readAndProcess(image_dir + str(train[base+b]) + '.jpg')
+            num = (base+b)%num_val
+            image = readAndProcess(image_dir + str(val[num]) + '.jpg')
             image_data.append(image)
             i = (i+1)%num_val
         image_data = np.array(image_data)
+        image_data = image_data / 255
         y_true = np.copy(y[base:i])
         if len(y_true) != len(image_data):
             y_true = np.copy(y[base:len(y)])
-            # y_true = np.concatenate((y_true,np.copy(y[:i])))
+            y_true = np.concatenate((y_true,np.copy(y[:i])))
         # print(image_data.shape, y_true.shape,i)
         yield [image_data, y_true]
