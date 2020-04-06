@@ -5,3 +5,5 @@
 *.ckpt.data-00000-of-00001
 data/train_data.npy
 data/images/
+data/train_image/
+data/test_image/
