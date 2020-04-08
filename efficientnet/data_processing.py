@@ -36,16 +36,16 @@ def letterbox_image(image, size):
     nh = int(ih*scale)
 
     image = image.resize((nw,nh), Image.BICUBIC)
-    new_image = Image.new('RGB', size, (128,128,128))
+    new_image = Image.new('RGB', size, (0,0,0))
     new_image.paste(image, ((w-nw)//2, (h-nh)//2))
     return new_image
 
 def readAndProcess(image_path):
     path = image_path
     im = Image.open(path)
-    # im = im.resize((600,600), Image.BICUBIC)
-    # im = np.array(im)
-    im = np.array(letterbox_image(im, (600,600)))
+    im = im.resize((224,224), Image.BICUBIC)
+    im = np.array(im)
+    # im = np.array(letterbox_image(im, (224,224)))
     # im = np.reshape(im,[1]+list(im.shape))
     return im 
     
@@ -58,7 +58,7 @@ def unison_shuffled_copies(x, y):
     
 def train_generator(image_dir, train, batch_size, y, num_train):
     i = 0
-    batch_size = batch_size/3
+    batch_size = batch_size//3
 
     while True :
         image_data = []
@@ -69,7 +69,7 @@ def train_generator(image_dir, train, batch_size, y, num_train):
             image = readAndProcess(image_dir + str(train[num]) + '.jpg')
             image_data.append(image)
             i = (i+1)%num_train
-        # image_data = np.array(image_data)
+        image_data = np.array(image_data)
         y_true = np.copy(y[base:i])
         if len(y_true) != len(image_data):
             y_true = np.copy(y[base:len(y)])

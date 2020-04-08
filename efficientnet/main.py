@@ -42,21 +42,14 @@ def _main():
     # y_val = np.copy(y[num_train:])
     train ,val, y_train,y_val = train_test_split(image_named, y, test_size = 0.22, random_state = 42, shuffle = True)
 
-    datagen = ImageDataGenerator(
-    featurewise_center=True,
-    featurewise_std_normalization=True,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    horizontal_flip=True)
-
     freeze = 1
 
     # step = 607
     num_train = 1420
     num_val = 401
     
-    log_dir = 'model/log/'
+    log_dir = 'log/imageNet/normal/'
+    check_path(log_dir)
     weights_path = 'model/model.h5'
     
     base_model = EfficientNetB7(input_shape = (600,600,3),
@@ -80,13 +73,10 @@ def _main():
 
 
     # Freeze FC layers
-    for i in range((len(model.layers)-freeze)):
-        model.layers[i].trainable = False
+    # for i in range((len(model.layers)-freeze)):
+    #     model.layers[i].trainable = False
 
-    # model.compile(optimizer = adam, 
-    #             loss = 'categorical_crossentropy',
-    #             # loss = [categorical_focal_loss(alpha=.25, gamma=2)],
-    #             metrics = ['accuracy'])
+    
     model.compile(optimizer = adam, 
             loss = 'categorical_crossentropy',
             metrics = ['accuracy'])
@@ -94,7 +84,7 @@ def _main():
     batch_size  = 6
     
     model.fit_generator(train_generator(image_path, train, batch_size, y_train, num_train),
-        epochs = 20, 
+        epochs = 50, 
         steps_per_epoch = num_train//batch_size, 
         validation_data = val_generator(image_path, val, batch_size, y_val, num_val),
         validation_steps = num_val//batch_size,
@@ -103,25 +93,9 @@ def _main():
         callbacks=[checkpoint])
     model.save_weights(log_dir+'model.h5')
    
-def categorical_focal_loss(gamma=2., alpha=.25):
-    def categorical_focal_loss_fixed(y_true, y_pred):
-        # Scale predictions so that the class probas of each sample sum to 1
-        y_pred /= K.sum(y_pred, axis=-1, keepdims=True)
 
-        # Clip the prediction value to prevent NaN's and Inf's
-        epsilon = K.epsilon()
-        y_pred = K.clip(y_pred, epsilon, 1. - epsilon)
-
-        # Calculate Cross Entropy
-        cross_entropy = -y_true * K.log(y_pred)
-
-        # Calculate Focal Loss
-        loss = alpha * K.pow(1 - y_pred, gamma) * cross_entropy
-
-        # Sum the losses in mini_batch
-        return K.sum(loss, axis=1)
-
-    return categorical_focal_loss_fixed
+def check_path(path):
+    os.makedirs(path) if not os.path.exists(path) else None
 
 if __name__ == "__main__":
     _main()
