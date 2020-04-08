@@ -43,9 +43,9 @@ def letterbox_image(image, size):
 def readAndProcess(image_path):
     path = image_path
     im = Image.open(path)
-    # im = im.resize((224,224), Image.BICUBIC)
-    # im = np.array(im)
-    im = np.array(letterbox_image(im, (224,224)))
+    im = im.resize((224,224), Image.BICUBIC)
+    im = np.array(im)
+    # im = np.array(letterbox_image(im, (224,224)))
     # im = np.reshape(im,[1]+list(im.shape))
     return im 
     

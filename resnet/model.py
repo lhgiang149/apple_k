@@ -101,14 +101,15 @@ def ResNet50(include_top=True,
              input_shape=(224,224,3),
              classes=4,
              activate = 'relu',
+             dropout_rate = None,
              **kwargs):
    
     if weights == '':
         print('Train from beginning!!')
     elif weights == 'imageNet':
-        weights = 'model/imageNetNoTop.h5'
+        weights = r'C:\Users\GE3F.P1\Desktop\toby_new\new\model\imageNetNoTop.h5'
         include_top = False
-    elif os.path.exists(weights):
+    elif not os.path.isfile(weights):
         raise Exception('Wrong path, this file doesn\'t exist')
     elif not weights.endswith('h5'):
         raise Exception('Wrong file, weight file must end with h5')
@@ -151,12 +152,13 @@ def ResNet50(include_top=True,
     x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b', activate= activate)
     x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c', activate= activate)
 
-    if include_top:
-        x = layers.GlobalAveragePooling2D(name='avg_pool')(x)
+    x = layers.GlobalAveragePooling2D(name='avg_pool')(x)
+    if dropout_rate:
+        x = layers.Dropout(rate = dropout_rate, name= 'drop')(x)
+
+    if include_top:    
         x = layers.Dense(classes, activation='softmax', kernel_initializer='he_normal', name='fc_layer', \
-                            kernel_regularizer=keras.regularizers.l2(l=0.1))(x)
-    else:
-        x = layers.GlobalAveragePooling2D()(x)
+                            kernel_regularizer=keras.regularizers.l2(l=0.2))(x)
         
 
     # Create model.
@@ -167,7 +169,7 @@ def ResNet50(include_top=True,
 
     if not include_top:
         out = layers.Dense(classes, activation='softmax', kernel_initializer='he_normal', name='fc_layer', \
-                                kernel_regularizer=keras.regularizers.l2(l=0.1))(model.output)
+                                kernel_regularizer=keras.regularizers.l2(l=0.2))(model.output)
         model = models.Model(inputs = [model.input], outputs=[out])
 
     return model

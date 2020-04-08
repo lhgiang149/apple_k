@@ -33,26 +33,21 @@ def _main():
     check_path(log_dir)
     weights_path = 'imageNet'
 
-    model = ResNet50(weights = 'imageNet',activate = 'swish')
+    model = ResNet50(weights = 'imageNet',activate = 'relu')
     
     
     # # temporary use Adam and
-    adam = Adam(lr = 0.001)
+    adam = Adam(lr = 0.0001)
     # logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
         monitor='val_loss', save_weights_only=True, save_best_only=True, mode = 'min')
    
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=1, min_lr = 1e-6)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=1, min_lr = 1e-5)
 
 
     # Freeze FC layers
     # for i in range((len(model.layers)-freeze)):
     #     model.layers[i].trainable = False
-
-    # model.compile(optimizer = adam, 
-    #             loss = 'categorical_crossentropy',
-    #             # loss = [categorical_focal_loss(alpha=.25, gamma=2)],
-    #             metrics = ['accuracy'])
     model.compile(optimizer = adam, 
             loss = 'categorical_crossentropy',
             metrics = ['accuracy'])
