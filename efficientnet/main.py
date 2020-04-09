@@ -65,7 +65,7 @@ def _main():
                         name='probs')(base_model.layers[-2].output)
     model = keras.models.Model(inputs = [base_model.input], outputs=[output])
     # # temporary use Adam and
-    adam = Adam(lr = 0.001)
+    adam = Adam(lr = 0.0001)
     # logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
         monitor='val_loss', save_weights_only=True, save_best_only=True, mode = 'min')

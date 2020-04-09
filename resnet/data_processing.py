@@ -14,10 +14,27 @@ from keras.preprocessing.image import ImageDataGenerator
 import imgaug as ia
 import imgaug.augmenters as iaa
 
-def augument(images, labels, number_aug = 2):
-    seq = iaa.Sequential([
-    iaa.Affine(rotate=(-50, 50)),
-    iaa.Crop(percent=(0, 0.2))], random_order=True)
+def augument(images, labels, number_aug = 2, simple = True):
+    if simple:
+        seq = iaa.Sequential([
+        iaa.Affine(rotate=(-50, 50)),
+        iaa.Crop(percent=(0, 0.2))], random_order=True)
+    else:
+        seq = iaa.Sequential([
+        iaa.SomeOf((0,3),[
+            iaa.Fliplr(1.0), # horizontally flip
+            iaa.Flipud(1.0),# Vertical flip
+            iaa.Sharpen(alpha=(0, 1.0), lightness=(0.75, 1.5)), # sharpen images
+            iaa.Crop(percent=(0, 0.4)),
+            iaa.Sometimes(0.5, iaa.Affine(rotate=5)),
+            iaa.Sometimes( 0.5,iaa.GaussianBlur(sigma=(0, 0.5))),
+            iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.05*255), per_channel=0.5),
+                ])
+            ], 
+            random_order=True #
+            )
+
+
 
     temp_image = np.copy(images)
     temp_labels = np.copy(labels)
@@ -56,7 +73,7 @@ def unison_shuffled_copies(x, y):
     p = np.random.permutation(len(x))
     return x[p], y[p]
     
-def train_generator(image_dir, train, batch_size, y, num_train):
+def train_generator(image_dir, train, batch_size, y, num_train, simple = True):
     i = 0
     batch_size = batch_size//3
 
@@ -74,7 +91,7 @@ def train_generator(image_dir, train, batch_size, y, num_train):
         if len(y_true) != len(image_data):
             y_true = np.copy(y[base:len(y)])
             y_true = np.concatenate((y_true,np.copy(y[:i]))) 
-        image_data, y_true = augument(image_data, y_true)
+        image_data, y_true = augument(image_data, y_true, simple)
         image_data = image_data/255
         yield [image_data, y_true]
         
