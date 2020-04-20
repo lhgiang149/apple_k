@@ -3,12 +3,12 @@ import cv2
 import numpy as np
 from model import *
 from PIL import Image
+# from res_vgg import *
 
 if __name__ == "__main__":
     # weight_path = r'C:\Users\ADMINS\Desktop\apple_k\resnet\model\collect_model\drop\swish\96.8_per.h5'
-    weight_path = r'C:\Users\ADMINS\Desktop\apple_k\resnet\model\collect_model\non_drop\relu\95.5_per.h5'
-    resnet = ResNet50(weights = weight_path, activate = 'relu')
-                        # , dropout_rate = 0.5)
+    weight_path = r'C:\Users\emage\OneDrive\Desktop\model.h5'
+    resnet = ResNet50(weights = weight_path, activate = 'swish', dropout_rate = 0.5)
 
     def readAndProcess(image_path):
         path = image_path
@@ -20,8 +20,8 @@ if __name__ == "__main__":
         # im = np.reshape(im,[1]+list(im.shape))
         return im 
 
-    image_path = 'C:/Users/ADMINS/Desktop/apple_k/data/test_image/'
-    test_path = 'C:/Users/ADMINS/Desktop/apple_k/data/test.csv'
+    image_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/images/'
+    test_path = 'C:/Users/emage/OneDrive/Desktop/apple_k/data/test.csv'
 
     csv = pd.read_csv(test_path)
     name = csv.image_id
@@ -41,4 +41,4 @@ if __name__ == "__main__":
 
     # csv.loc[0,1:]= np.array([1,2,3,4])
     # print(csv.head())
-    csv.to_csv (r'C:\Users\ADMINS\Desktop\result_relu.csv', index = False, header=True)
+    csv.to_csv (r'C:\Users\emage\OneDrive\Desktop\result_relu.csv', index = False, header=True)

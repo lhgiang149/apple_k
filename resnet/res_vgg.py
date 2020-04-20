@@ -153,12 +153,15 @@ def ResNet50(include_top=True,
     x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c', activate= activate)
 
     x = layers.GlobalAveragePooling2D(name='avg_pool')(x)
+
     if dropout_rate:
         x = layers.Dropout(rate = dropout_rate, name= 'drop')(x)
 
     if include_top:    
+        x = layers.Dense(4016, activation = activate, kernel_initializer='he_normal', name = 'fc1')(x)
+        x = layers.Dense(4016, activation = activate, kernel_initializer='he_normal', name = 'fc2')(x)
         x = layers.Dense(classes, activation='softmax', kernel_initializer='he_normal', name='fc_layer', \
-                            kernel_regularizer=keras.regularizers.l2(l=0.3))(x)
+                            kernel_regularizer=keras.regularizers.l2(l=0.5))(x)
         
 
     # Create model.
@@ -169,8 +172,10 @@ def ResNet50(include_top=True,
         model.load_weights(weights)
 
     if not include_top:
-        out = layers.Dense(classes, activation='softmax', kernel_initializer='he_normal', name='fc_layer', \
-                                kernel_regularizer=keras.regularizers.l2(l=0.3))(model.output)
-        model = models.Model(inputs = [model.input], outputs=[out])
+        out = layers.Dense(4016, activation = activate, kernel_initializer='he_normal', name = 'fc1')(model.output)
+        x = layers.Dense(4016, activation = activate, kernel_initializer='he_normal', name = 'fc2')(out)
+        x = layers.Dense(classes, activation='softmax', kernel_initializer='he_normal', name='fc_layer', \
+                                kernel_regularizer=keras.regularizers.l2(l=0.5))(x)
+        model = models.Model(inputs = [model.input], outputs=[x])
 
     return model

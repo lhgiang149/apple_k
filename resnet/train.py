@@ -33,7 +33,7 @@ def _main():
     check_path(log_dir)
     weights_path = 'imageNet'
 
-    model = ResNet50(weights = 'imageNet',activate = 'relu')
+    model = ResNet50(weights = 'imageNet',activate = 'relu', include_top= True)
     
     
     # # temporary use Adam and
