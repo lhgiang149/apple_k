@@ -1,8 +1,0 @@
-imageNet - non_letter_image_Relu model:
-+ Use pretrain from imageNet weights
-+ Use ReLu as activate function in all layers
-+ Use adam optimizer with lr = 0.001
-+ Loss categorical_crossentropy
-+ Doesn't use letter_box pre_processing
-
-
