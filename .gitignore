@@ -3,6 +3,10 @@
 *.pth
 *_test.py
 *.ckpt.data-00000-of-00001
+
+*.jpg
+*.png
+
 data/train_data.npy
 data/images/
 data/train_image/
