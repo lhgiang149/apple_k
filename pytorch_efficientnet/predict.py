@@ -14,9 +14,9 @@ from utilities import *
 
 if __name__ == "__main__":
     
-    params = {'size_input': 456,
+    params = {'size_input': 600,
             'workers': 8,
-            'batch_size': 16,
+            'batch_size': 32,
             'num_classes':4}
 
 
@@ -33,10 +33,10 @@ if __name__ == "__main__":
 
     # model = resnet50()
     # model.fc = nn.Linear(model.fc.in_features, params['num_classes'])
-    model = EfficientNet.from_pretrained('efficientnet-b6')
+    model = EfficientNet.from_pretrained('efficientnet-b7')
     model._fc = nn.Linear(model._fc.in_features,params['num_classes'])
 
-    weights_path = 'C:/Users/vcl/Desktop/efficientnetb6_ver3_epochs_20_loss_0.0116.pth'
+    weights_path = 'C:/Users/vcl/Desktop/efficientnetb7_epochs_11_loss_0.0125.pth'
     model.load_state_dict(torch.load(weights_path))
     model.to(device)
 
@@ -68,4 +68,4 @@ if __name__ == "__main__":
     df.multiple_diseases = valid_prob[:,1]
     df.rust = valid_prob[:,2]
     df.scab = valid_prob[:,3]
-    df.to_csv('submission.csv', index=False)
+    df.to_csv('submission1.csv', index=False)
