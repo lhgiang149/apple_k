@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np 
 import pandas as pd
@@ -8,7 +9,8 @@ from torch.utils.data import Dataset
 
 from matplotlib import pyplot as plt
 import albumentations.pytorch as AT
-# from info import AllLabel
+import sklearn.metrics as sk
+import seaborn as sn
 from sklearn.metrics import roc_curve, auc
 from albumentations import (
     RandomRotate90, Flip, Transpose, GaussNoise, Blur, VerticalFlip, HorizontalFlip, Flip, \
@@ -27,7 +29,7 @@ def transforms(size_image):
         AT.ToTensor()
     ])
 
-dataroot = '/home/giang/Desktop/plant-pathology-2020-fgvc7/images/'
+dataroot = 'C:/Users/vcl/Desktop/data/images/'
 
 def extractData(csv_path, json_path = ''):
     # extract data from csv file
@@ -83,20 +85,39 @@ def evaluate(y_true, predict_score, save_path, pos_label = 1, plot = True):
             plt.show()
     return auc(fpr, tpr)
 
-def confusion_matrix(y_true, predict_score, save_path):
-    import sklearn.metrics as sk
-    import seaborn as sn
-    y_true = np.reshape(y_true, [max(y_true.shape)])
-    predict_score = np.reshape(predict_score, [max(predict_score.shape)])
-    predict = predict_score > 0.5
+def confusion_matrix(y_true, predict, class_name, save_path):
+    '''
+    Return heatmap for classification task only
+    Input:
+        + y_true: list or 1D numpy array of truth label (E.g: [0,1,2,3,2])
+        + predict: list or 1D numpy array of predict label(E.g: [0,1,3,1,2])
+        + class_name: list or 1D numpy array of class_name in label order 
+                (E.g: ['class1','class2','class3'], with class1 label is 0, 
+                class2 is 1, and class3 is 2)
+        + save_path: where should this function save the image?
+    Output:
+        + None
+    '''
     confusion = np.round(sk.confusion_matrix(y_true,predict))
-    df_cm = pd.DataFrame(confusion, index = [i for i in ["Benign", "Malignant"]],
-                    columns = [i for i in ["Benign", "Malignant"]])
+    df_cm = pd.DataFrame(confusion, index = class_name,
+                    columns = class_name)
     plt.figure(figsize = (10,8))
     sn.set(font_scale=1.4)
     sn.heatmap(df_cm, annot=True, annot_kws={"size": 20}, fmt="d")
+    plt.xlabel('Prediction')
+    plt.ylabel('Ground Truth')
     plt.savefig(save_path)
 
+def accuracy(y_true, predict):
+    '''
+    Return accuracy for classification task only
+    Input:
+        + y_true: list or 1D numpy array of truth label (E.g: [0,1,2,3,2])
+        + predict: list or 1D numpy array of predict label(E.g: [0,1,3,1,2])
+    Output:
+        + accuracy
+    '''
+    return np.round(sum(y_true == predict)/(y_true.shape[0]),4)
 
 def augmentation(size_image,p=0.5):
     return Compose([
@@ -153,10 +174,10 @@ def augmentation_hardcore(size_image, p = 0.8):
     ], p = p)
 
 class PyTorchImageDataset(Dataset):
-    def __init__(self, image_list, labels,train, size_image, **kwags):
+    def __init__(self, image_list,train, labels, size_image, **kwags):
         self.image_list = image_list
-        self.labels = labels
         self.transforms = transforms(size_image)
+        self.labels = labels
         self.train = train
         self.hard = kwags.pop('hard', False)
         if self.hard:
@@ -188,9 +209,7 @@ class PyTorchImageDataset(Dataset):
             image = self.augment(image=image)['image']
             
         image = self.transforms(image = image)['image']
-            
         return image, label
-
 
 class PyTorchTestImageDataset(Dataset):
     def __init__(self, image_list, size_image):
@@ -261,3 +280,7 @@ def extractLabelsNums(y):
     class2 = np.where(y==2)[0]
     class3 = np.where(y==3)[0]
     return len(class0), len(class1), len(class2), len(class3)
+
+def checkDir(path):
+    if not os.path.exists(path): os.mkdir(path) 
+    
