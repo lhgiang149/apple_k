@@ -19,19 +19,33 @@ from efficientnet_pytorch import EfficientNet
 # from model import EfficientNet
 from utilities import *
 
+'''
+Efficientnet input size:
+    + B0: 224
+    + B1: 240
+    + B2: 260
+    + B3: 300
+    + B4: 380
+    + B5: 456
+    + B6: 528
+    + B7: 600
+'''
+
+
 def train():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     params = {'workers': 8,
-             'batch_size': 4,
-             'num_epochs': 1,
+             'batch_size': 1,
+             'num_epochs': 20,
              'lr': 0.01,
-             'size_image': 456,
+             'size_image': 600,
              'num_classes':4,
              'checkpoint': True,
              'save_path': './checkpoint/'}
 
+    checkDir(params['save_path'])
     # dataframe = pd.read_csv('./../data/train.csv')
-    df = pd.read_csv('/home/giang/Desktop/plant-pathology-2020-fgvc7/train.csv')
+    df = pd.read_csv('C:/Users/vcl/Desktop/data/train.csv')
     
     label = []
     a_df = np.array(df)
@@ -71,7 +85,7 @@ def train():
     # model = effNet.initModel().to(device)
     
     # input size of b5 456 x 456 
-    model = EfficientNet.from_pretrained('efficientnet-b5')
+    model = EfficientNet.from_pretrained('efficientnet-b7')
      
     # effNet = TobyNet('efficientnet-b0', weights_path = weight_path, num_classes = 2)
     model._fc = nn.Linear(model._fc.in_features, params['num_classes'])
@@ -100,8 +114,9 @@ def train():
     optimizer = optim.SGD(model.parameters(), lr = params['lr'], momentum= 0.9, nesterov= True)
     loss_train = []
     loss_valid = []
-    auc_list = []
-    highest_auc = 0
+
+    pre_acc = 0.3    
+
 
     n_class0, n_class1, n_class2, n_class3 = extractLabelsNums(y_train)
     print(tabulate([['Healthy', n_class0], ['Multiple', n_class1], ['Rust', n_class2], ['Scab', n_class3]], headers=['Name', 'Number'], tablefmt='orgtbl'))
@@ -154,7 +169,6 @@ def train():
                       label = label.to(device)
 
                       # torch.save(data_batch, 'test.pt')
-
                       output = model(data_batch)
 
                       prob = softmax(output)
@@ -162,26 +176,25 @@ def train():
                       loss = criterion(output, label)
                       
                       if phase == 'valid' and i == 0:
-                          valid_label = label.cpu().detach().numpy()
-                          
-                          valid_prob = np.reshape(prob.cpu().detach().numpy(), (b_size,params['num_classes']))[:,1]
-                          
-                          loss_valid.append(loss.item())
-
+                        valid_label = label.cpu().detach().numpy()
+                        
+                        valid_prob = prob.cpu().detach().numpy()
+                                                    
+                        loss_valid.append(loss.item())
                       else:
-                          torch.cuda.synchronize() 
+                        torch.cuda.synchronize() 
 
-                          temp_label = label.cpu().detach().numpy()
+                        temp_label = label.cpu().detach().numpy()
 
-                          valid_label = np.concatenate((valid_label, temp_label))
+                        valid_label = np.concatenate((valid_label, temp_label))
 
-                          torch.cuda.synchronize() 
+                        torch.cuda.synchronize() 
 
-                          temp_prob = np.reshape(prob.cpu().detach().numpy(), (b_size,params['num_classes']))[:,1]
+                        temp_prob = prob.cpu().detach().numpy()
 
-                          valid_prob = np.concatenate((valid_prob, temp_prob), axis = 0)
+                        valid_prob = np.concatenate((valid_prob, temp_prob), axis = 0)
 
-                          loss_valid.append(loss.item())
+                        loss_valid.append(loss.item())
         if phase == 'valid':
             '''
             TODO: 
@@ -199,15 +212,22 @@ def train():
             # if auc > highest_auc:
             #     hightest_auc = auc
             #     save = True
+
+            predict_labels = np.argmax(valid_prob, axis=1)
+            acc = accuracy(valid_label, predict_labels)
+            class_name = ['Healthy','Both','Rust','Scab']
+            confusion_matrix(valid_label, predict_labels, class_name, params['save_path']+str(last + epoch+1))
+            print('epoch %d valid acc: %.3f' %(epoch + 1, acc))
             print('epoch %d valid loss: %.3f' %(epoch + 1, loss.item()))
             # print('epoch %d valid auc: %.3f' %(epoch + 1, auc))
             
             
             # if params['checkpoint'] and save:
                 # path_name = 'efficentnetB5_epochs_' + str(epoch+1) +'_loss_' + loss.item() + '.pth'
-            path_name = params['save_path'] + 'efficientnetb0_ver3_epochs_' + str(last + epoch+1) +'_loss_' + str(round(loss.item(),4)) + '.pth'
-            torch.save(model.state_dict(), path_name)
-            # save = False
+            path_name = params['save_path'] + 'efficientnetb7_epochs_' + str(last + epoch+1) +'_loss_' + str(round(loss.item(),4)) + '.pth'
+            if acc > pre_acc:
+                torch.save(model.state_dict(), path_name)
+                pre_acc = acc
 
     # PATH = params['save_path'] + 'resnet50.pth'
     # torch.save(model.state_dict(), PATH)            
