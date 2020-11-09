@@ -6,8 +6,12 @@
 
 *.jpg
 *.png
+*.PNG
+*.JPG
+
 
 data/train_data.npy
 data/images/
 data/train_image/
 data/test_image/
+pytorch_efficientnet/weights/
